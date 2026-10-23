@@ -7,5 +7,15 @@ def commits_fixture():
     ]
 
 def history_messages(commits, head_id):
-    # walk parent pointers from head_id, collecting messages newest-first
-    pass
+    # walk parent pointers from head_id, collecting messages newest-first'
+    dic={i['id']:(i['parent'],i['message']) for i in commits}
+    if not dic.get(head_id):
+        return []
+    message_list=[]
+    while head_id!=None:
+        parent=dic.get(head_id)[0]
+        message=dic.get(head_id)[1]
+        message_list.append(message)
+        head_id=parent
+    return message_list
+#print(history_messages(commits_fixture(),'d4'))
