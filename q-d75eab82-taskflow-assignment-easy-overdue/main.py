@@ -1,10 +1,18 @@
 class TaskService:
     def __init__(self, repo, clock):
-        # store the injected dependencies (do NOT create them here)
-        self.repo = repo      # callable() -> list[dict]
-        self.clock = clock    # callable() -> 'YYYY-MM-DD'
+        self.repo = repo
+        self.clock = clock
 
     def overdue_count(self):
-        # TODO: a task is overdue when it HAS a due date, is NOT 'done',
-        # and its due date is STRICTLY before clock(). Return the count.
-        pass
+        today = self.clock()
+        tasks = self.repo()
+        count = 0
+
+        for task in tasks:
+            due_date = task.get('due')
+            status = task.get('status')
+
+            if due_date is not None and status != 'done' and due_date < today:
+                count += 1
+
+        return count
